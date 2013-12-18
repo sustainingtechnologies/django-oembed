@@ -4,6 +4,8 @@ from oembed.core import replace
 
 register = template.Library()
 
+@register.filter(is_safe=True)
+@stringfilter
 def oembed(input, args):
     if args:
         width, height = args.lower().split('x')
@@ -13,10 +15,7 @@ def oembed(input, args):
     else:
         width, height = None, None
     return replace(input, max_width=width, max_height=height)
-oembed.is_safe = True
-oembed = stringfilter(oembed)
 
-register.filter('oembed', oembed)
 
 def do_oembed(parser, token):
     """
