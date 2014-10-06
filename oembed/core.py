@@ -1,15 +1,12 @@
 import re
 import urllib2
 import gzip
+import json
 from heapq import heappush, heappop
 try:
     from cStringIO import StringIO
 except ImportError:
     from StringIO import StringIO
-try:
-    import simplejson
-except ImportError:
-    from django.utils import simplejson
 from django.conf import settings
 from django.utils.safestring import mark_safe
 from oembed.models import ProviderRule, StoredOEmbed
@@ -156,8 +153,8 @@ def replace(text, max_width=MAX_WIDTH, max_height=MAX_HEIGHT):
                     rule.endpoint, part, max_width, max_height, FORMAT
                 )
                 # Fetch the link and parse the JSON.
-                resp = simplejson.loads(fetch(url))
                 
+                resp = json.loads(fetch(url))
                 # link types that don't have html elements aren't dealt with right now.
                 if resp['type'] == 'link' and 'html' not in resp:
                     raise ValueError
